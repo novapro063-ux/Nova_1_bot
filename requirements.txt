@@ -1,4 +1,4 @@
 discord.py
 easy-pil
 aiosqlite
-
+npm install mongodb
