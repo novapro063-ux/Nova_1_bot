@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 class Prefix(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="setprefix", help="Change the custom prefix for this server.")
+    @commands.hybrid_command(name="setprefix", description="Change the custom prefix for this server.")
     @commands.has_permissions(administrator=True)
+    @app_commands.describe(new_prefix="Type the new prefix (e.g., ! or ?)")
     async def set_prefix(self, ctx, new_prefix: str):
-        # প্রেফিক্স ক্লিন করা
         clean_prefix = new_prefix.strip()
         
         # MongoDB-তে সেভ করা
@@ -22,21 +23,13 @@ class Prefix(commands.Cog):
             title="✨ Prefix Updated",
             description=(
                 f"Successfully set the custom prefix to: **`{clean_prefix}`**\n\n"
-                f"**Available Prefixes:**\n"
-                f"1. `Nova` (Default - Always works)\n"
-                f"2. `{clean_prefix}` (Your custom prefix)"
+                f"**Usage:**\n"
+                f"`{clean_prefix}bal` or `/balance`"
             ),
             color=discord.Color.green()
         )
         embed.set_footer(text="Nova Economy System")
         await ctx.send(embed=embed)
-
-    @set_prefix.error
-    async def set_prefix_error(self, ctx, error):
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.send("❌ **Access Denied!** You need `Administrator` permission.")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("❌ **Usage:** `Nova setprefix <prefix>`")
 
 async def setup(bot):
     await bot.add_cog(Prefix(bot))
