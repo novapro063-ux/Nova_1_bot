@@ -1,4 +1,4 @@
 discord.py
+motor
+dnspython
 easy-pil
-aiosqlite
-npm install mongodb
